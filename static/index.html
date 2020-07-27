@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Generate some text!</title>
+    <style type="text/css" media="screen">
+     body{
+         display:flex;
+         flex-direction: column;
+         height: 100vh;
+         width: 100vw;
+         justify-content: center;
+         align-items: center;
+     }
+     #output-container {
+         margin-top: 4em;
+         font-size: 2em;
+         width: 50%;
+     }
+    </style>
+</head>
+<body>
+    <form action="/generate" method="post">
+        <input id="context" name="context" placeholder=
+        "Input prompt" type="text"> <input class="button" type=
+        "submit" value="Go">
+    </form>
+    <div id="output-container"></div>
+    <script type="text/javascript">
+     document.body.addEventListener("submit", async function(event) {
+         event.preventDefault();
+
+         var text = document.getElementById("context").value;
+         var request_body = {
+             body: JSON.stringify({"context": text }),
+             headers: {
+                 "Content-Type": "application/json",
+             },
+             method: "post"
+         };
+         const result = await fetch("/generate", request_body)
+             .then(response => response.text())
+             .then(txt => document.getElementById("output-container").innerHTML = txt + "...")
+             .catch(error => {
+                 console.log(error);
+             });
+     });
+    </script>
+</body>
+</html>
